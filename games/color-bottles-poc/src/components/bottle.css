@@ -1,0 +1,77 @@
+
+
+div.bottle {
+
+    position: relative;
+
+    width: 50px;
+    height: 200px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    margin: 10px;
+    padding: 25px 0 0 0;
+    border: solid 1px white;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    border-top-left-radius: 40% 15px;
+    border-top-right-radius: 40% 15px;
+
+    overflow: hidden;
+
+    div.part {
+
+    
+        width: 100%;
+        flex: 0 0 auto;
+        
+        &.two-part {
+            height: 50%;
+        }
+
+        &.three-part {
+            height: 33%;
+        }
+
+        &.four-part {
+            height: 25%;
+        }
+
+        &.five-part {
+            height: 20%;
+        }
+
+        &.six-part {
+            height: 16.5%;
+        }
+
+        &.seven-part {
+            height: 14.2%;
+        }
+
+        &.eight-part {
+            height: 12.5%;
+        }
+
+        &.nine-part {
+            height: 11.1%;
+        }
+
+        &.ten-part {
+            height: 10%;
+        }
+    }
+
+    &.source {
+        box-shadow: 0 0 10px 5px white;
+    }
+
+    &.completed {
+        opacity: 0.25;
+    }
+}
