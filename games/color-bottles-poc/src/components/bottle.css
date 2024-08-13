@@ -15,7 +15,7 @@ div.bottle {
 
     margin: 10px;
     padding: 25px 0 0 0;
-    border: solid 1px white;
+    border: solid 1px #0008;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 
@@ -23,6 +23,10 @@ div.bottle {
     border-top-right-radius: 40% 15px;
 
     overflow: hidden;
+
+    transition: all 0.25s ease;
+
+    box-shadow: 0 0 3px 1px #0004;
 
     div.part {
 
@@ -65,13 +69,45 @@ div.bottle {
         &.ten-part {
             height: 10%;
         }
+
+        &.highlight {
+            width: 75%;
+            margin: 0 12.5%;
+            border-left: solid 1px #FFF8;
+            border-right: solid 1px #FFF8;
+
+            &:first-child {
+                border-top: solid 1px #FFF8;
+                border-top-right-radius: 5px;
+                border-top-left-radius: 5px;
+            }
+
+            &:last-child {
+                border-bottom: solid 1px white;
+                
+                
+            }
+        }
     }
 
     &.source {
         box-shadow: 0 0 10px 5px white;
+        transform: scale(1.1);
     }
 
     &.completed {
         opacity: 0.25;
+        transform: scale(0.75);
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #000B 0%, #FFF3 50%, #000B 100%);
+        z-index: 1;
     }
 }

@@ -6,6 +6,7 @@ import { generateBottlesForColors, generateColors } from "./utils/randomBottle";
 import { bottleIsDone, win } from "./utils/bottleValidator";
 import Menu from "./components/Menu";
 import { GameSettings } from "./models/GameSettings";
+import { bottlePour } from "./utils/bottleUtils";
 
 
 
@@ -23,16 +24,17 @@ function App() {
 
     useEffect(() => {
         if (source && target) {
-            
 
-            const mPart = source.parts.shift();
-            if(!mPart) return;
-            target.parts.unshift(mPart);
-            console.log(`Pource from ${source.id} to ${target.id}`);
+            bottlePour(source, target);
 
-            if(bottleIsDone(target)) {
-                target.completed = true;
-            }
+            // const mPart = source.parts.shift();
+            // if(!mPart) return;
+            // target.parts.unshift(mPart);
+            // console.log(`Pource from ${source.id} to ${target.id}`);
+
+            // if(bottleIsDone(target)) {
+            //     target.completed = true;
+            // }
 
             if(win(bottles)) {
                 console.log("You win");
@@ -55,6 +57,8 @@ function App() {
         }
 
         if (!target && source !== null && source.id !== b.id) {
+            
+            
             if (b.parts.length >= b.partCount) return;
             if (b.completed) return;
 

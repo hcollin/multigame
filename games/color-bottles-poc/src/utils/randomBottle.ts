@@ -4,7 +4,7 @@ import { iBottle } from "../models/Bottle.model";
 let id = 0;
 let partId = 0;
 
-const AVAILABLECOLORS = ["red", "green", "blue", "yellow", "purple", "orange"];
+const AVAILABLECOLORS = ["red", "green", "blue", "yellow", "purple", "brown", "pink", "orange", "cyan", "magenta"];
 
 export function randomBottle(partCount = 4): iBottle {
     id++;
@@ -36,7 +36,7 @@ export function randomBottle(partCount = 4): iBottle {
 export function generateColors(multiplier = 1, partCount = 4, colorCount = 4): string[] {
     const colors: string[] = [];
 
-    if (colorCount >= AVAILABLECOLORS.length)
+    if (colorCount >= AVAILABLECOLORS.length + 1)
         throw new Error(`Too many colors requested. Max is ${AVAILABLECOLORS.length}`);
 
     for (let m = 0; m < multiplier; m++) {
