@@ -4,6 +4,10 @@ import Bottle from "./components/Bottle";
 import { iBottle } from "./models/Bottle.model";
 import { generateBottlesForColors, generateColors } from "./utils/randomBottle";
 import { bottleIsDone, win } from "./utils/bottleValidator";
+import Menu from "./components/Menu";
+import { GameSettings } from "./models/GameSettings";
+
+
 
 function App() {
     const [bottles, setBottles] = useState<iBottle[]>([]);
@@ -64,21 +68,18 @@ function App() {
         }
     }
 
-    function restart() {
+    // function restart() {
+    //     setTarget(null);
+    //     setSource(null);
+    //     setGameOver(false);
+
+    //     resetGame();
+    // }
+
+    function resetGame(settings: GameSettings = { colors: 4, parts: 6, multiplier: 1 }) {
         setTarget(null);
         setSource(null);
         setGameOver(false);
-
-        resetGame();
-    }
-
-    function resetGame() {
-        const settings = {
-            colors: 4,
-            multiplier: 1,
-            parts: 6,
-        };
-
         const colorArray = generateColors(settings.multiplier, settings.parts, settings.colors);
 
         const newBottles = generateBottlesForColors(colorArray, settings.parts);
@@ -88,6 +89,7 @@ function App() {
 
     return (
         <>
+        <Menu click={resetGame}/>
             <div className="bottles">
                 {bottles.map((bottle) => (
                     <Bottle
@@ -102,7 +104,7 @@ function App() {
                 {gameOver && <div className="game-over">
                     
                     <p>Game Over</p>
-                    <button onClick={restart}>Restart</button>
+                    
                 </div>}
             </div>
         </>
