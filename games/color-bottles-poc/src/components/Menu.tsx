@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { GameSettings } from "../models/GameSettings";
 
+import "./menu.css";
+
 interface MenuProps {
 	click: (settings: GameSettings) => void;
 }
+
+
 
 const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
 	{
@@ -55,10 +59,6 @@ const Menu = (props: MenuProps) => {
 
 	const [showCustom, setShowCustom] = useState<boolean>(false);
 
-	function backToSite() {
-		console.log("BACK TO SITE!");
-	}
-
 	function newGame() {
 		props.click({
 			colors: colors,
@@ -73,7 +73,7 @@ const Menu = (props: MenuProps) => {
 
 	return (
 		<nav>
-			<button onClick={backToSite}>Main Site</button>
+			
 
 			{!showCustom &&
 				DEFAULTSETTINGS.map((settingsItem, i) => (

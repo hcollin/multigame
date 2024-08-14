@@ -28,11 +28,15 @@ div.bottle {
 
     box-shadow: 0 0 3px 1px #0004;
 
+    background: linear-gradient(90deg, #AAA, #EEE 15%, #FFF 50%, #EEE 85%, #AAA);
+
     div.part {
 
     
         width: 100%;
         flex: 0 0 auto;
+        border-top: solid 1px #0004;
+        border-bottom: solid 1px #0008;
         
         &.two-part {
             height: 50%;
@@ -71,23 +75,15 @@ div.bottle {
         }
 
         &.highlight {
-            width: 75%;
-            margin: 0 12.5%;
-            border-left: solid 1px #FFF8;
-            border-right: solid 1px #FFF8;
-
-            &:first-child {
-                border-top: solid 1px #FFF8;
-                border-top-right-radius: 5px;
-                border-top-left-radius: 5px;
-            }
-
-            &:last-child {
-                border-bottom: solid 1px white;
-                
-                
-            }
+            
+            filter: brightness(3);
         }
+
+        &.last-highlight {
+            margin-bottom: 10px;
+        }
+
+        
     }
 
     &.source {

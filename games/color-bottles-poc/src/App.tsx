@@ -27,15 +27,6 @@ function App() {
 
             bottlePour(source, target);
 
-            // const mPart = source.parts.shift();
-            // if(!mPart) return;
-            // target.parts.unshift(mPart);
-            // console.log(`Pource from ${source.id} to ${target.id}`);
-
-            // if(bottleIsDone(target)) {
-            //     target.completed = true;
-            // }
-
             if(win(bottles)) {
                 console.log("You win");
                 setGameOver(true);

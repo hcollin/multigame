@@ -36,7 +36,7 @@ const Bottle = (props: BottleProps) => {
         <div className={`bottle ${props.source ? "source" : ""} ${props.target ? "target" : ""} ${props.bottle.completed ? "completed" : ""}`} onClick={handleClick}>
             {props.bottle.parts.map((part, i) => {
                 return (
-                    <BottlePart key={part.id} color={part.color} partCount={props.bottle.partCount} hightlight={props.source && i < topColorSize} />
+                    <BottlePart key={part.id} color={part.color} partCount={props.bottle.partCount} hightlight={props.source && i < topColorSize} lastHighlight={props.source && i === topColorSize - 1} />
                 );
             })}
         </div>
@@ -44,9 +44,10 @@ const Bottle = (props: BottleProps) => {
 };
 
 
-const BottlePart = (props: { color: string, partCount: number, hightlight: boolean }) => {
+const BottlePart = (props: { color: string, partCount: number, hightlight: boolean, lastHighlight: boolean }) => {
     const classes: string[] = ["part"];
     if (props.hightlight) classes.push("highlight");
+    if (props.lastHighlight) classes.push("last-highlight");
     classes.push(PARTCLASSES[props.partCount]);
 
     return (

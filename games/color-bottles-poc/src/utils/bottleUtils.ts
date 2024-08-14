@@ -16,13 +16,13 @@ export function getTopColorCount(b: iBottle): number {
 }
 
 
-export function bottlePour(source: iBottle, target: iBottle) {
+export function bottlePour(source: iBottle, target: iBottle): boolean {
     
     // Is target bottle full?
-    if (target.parts.length -1 >= target.partCount) return;
+    if (target.parts.length -1 >= target.partCount) return false;
 
     // Is source bottle empty?
-    if (source.parts.length === 0) return;
+    if (source.parts.length === 0) return false;
 
     // Get parts from the top of the source bottle (shift) until another color is encountered
     const mParts: iBottlePart[] = [];
@@ -48,7 +48,7 @@ export function bottlePour(source: iBottle, target: iBottle) {
     // If there is no room in the target bottle, put the parts back in the source bottle
     if(target.parts.length + mParts.length > target.partCount) {
         mParts.forEach((p) => source.parts.unshift(p));
-        return;
+        return false;
     };
     
     // Add the parts to the target bottle
@@ -62,4 +62,5 @@ export function bottlePour(source: iBottle, target: iBottle) {
     if(bottleIsDone(target)) {
         target.completed = true;
     }
+    return true;
 }
