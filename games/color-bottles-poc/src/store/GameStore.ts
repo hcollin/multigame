@@ -23,7 +23,7 @@ export interface GameStore {
     settings: GameSettings;
 
     // Game actions
-    pour: (source: iBottle, target: iBottle) => boolean;
+    pour: (sourceId: string, targetId: string) => boolean;
 
     // Checks if the player wins or loses. Returns true if the state changes
     checkState: () => boolean;
@@ -36,13 +36,15 @@ export interface GameStore {
     setBottles: (bottles: iBottle[]) => void;
     setSettings: (settings: GameSettings) => void;
     setStatus: (status: GAMESTATUS) => void;
+
+    getBottle(id: string): iBottle | undefined;
 }
 
 
 /**
  * Game Store Object
  */
-export const gameStore = proxy<GameStore>({
+export const gameStore: GameStore = proxy<GameStore>({
     bottles: [],
     origBottles: [],
 
@@ -56,7 +58,12 @@ export const gameStore = proxy<GameStore>({
 
     status: GAMESTATUS.play,
 
-    pour: (source, target) => {
+    pour: (sid, tid) => {
+        console.log(`Pour ${sid} to ${tid}` );
+        const source = gameStore.getBottle(sid);
+        const target = gameStore.getBottle(tid);
+        if(!source || !target) return false;
+        
         const pourIsSuccess = bottlePour(source, target);
         if (!pourIsSuccess) return false;
         gameStore.bottles = gameStore.bottles.map((b) => {
@@ -65,6 +72,7 @@ export const gameStore = proxy<GameStore>({
             return b;
         });
         gameStore.checkState();
+        gameStore.moves++;
         return true;
     },
 
@@ -113,4 +121,8 @@ export const gameStore = proxy<GameStore>({
     setStatus: (status: GAMESTATUS) => {
         gameStore.status = status;
     },
+
+    getBottle: (id) => {
+        return gameStore.bottles.find((b: iBottle) => b.id === id);
+    }
 });

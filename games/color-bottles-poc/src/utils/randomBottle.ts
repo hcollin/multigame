@@ -55,7 +55,6 @@ export function generateBottlesForColors(colors: string[], partCount: number): i
     const rcolors = shuffle(colors);
 
     const bottleCount = rcolors.length / partCount + 1;
-    console.log("BOttle Count", bottleCount);
 
     const bottles: iBottle[] = [];
 

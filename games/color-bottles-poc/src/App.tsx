@@ -1,91 +1,75 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import Bottle from "./components/Bottle";
-import { iBottle } from "./models/Bottle.model";
-import { generateBottlesForColors, generateColors } from "./utils/randomBottle";
-import { bottleIsDone, win } from "./utils/bottleValidator";
 import Menu from "./components/Menu";
-import { GameSettings } from "./models/GameSettings";
-import { bottlePour } from "./utils/bottleUtils";
-
-
+import Bottles from "./components/Bottles";
+import Moves from "./components/Moves";
 
 function App() {
-    const [bottles, setBottles] = useState<iBottle[]>([]);
+    
 
-    const [source, setSource] = useState<iBottle | null>(null);
-    const [target, setTarget] = useState<iBottle | null>(null);
+    // const [source, setSource] = useState<iBottle | null>(null);
+    // const [target, setTarget] = useState<iBottle | null>(null);
 
-    const [gameOver, setGameOver] = useState(false);
+    // const [gameOver, setGameOver] = useState(false);
 
-    useEffect(() => {
-        resetGame();
-    }, []);
+    // useEffect(() => {
+    //     resetGame();
+    // }, []);
 
-    useEffect(() => {
-        if (source && target) {
+    // useEffect(() => {
+    //     if (source && target) {
+    //         bottlePour(source, target);
 
-            bottlePour(source, target);
+    //         if (win(bottles)) {
+    //             console.log("You win");
+    //             setGameOver(true);
+    //         }
 
-            if(win(bottles)) {
-                console.log("You win");
-                setGameOver(true);
-            }
+    //         setTarget(null);
+    //         setSource(null);
+    //     }
+    // }, [source, target]);
 
-            setTarget(null);
-            setSource(null);
-        }
-    }, [source, target]);
+    // function selectBottle(b: iBottle) {
+    //     if (gameOver) return;
 
-    function selectBottle(b: iBottle) {
-        
-        if(gameOver) return;
+    //     if (!source) {
+    //         if (b.parts.length === 0) return;
+    //         setSource(b);
+    //         return;
+    //     }
 
-        if (!source) {
-            if (b.parts.length === 0) return;
-            setSource(b);
-            return;
-        }
+    //     if (!target && source !== null && source.id !== b.id) {
+    //         if (b.parts.length >= b.partCount) return;
+    //         if (b.completed) return;
 
-        if (!target && source !== null && source.id !== b.id) {
-            
-            
-            if (b.parts.length >= b.partCount) return;
-            if (b.completed) return;
+    //         setTarget(b);
+    //         return;
+    //     }
 
-            setTarget(b);
-            return;
-        }
+    //     if (source && source.id === b.id) {
+    //         setSource(null);
+    //         return;
+    //     }
+    // }
 
-        if (source && source.id === b.id) {
-            setSource(null);
-            return;
-        }
-    }
-
-    // function restart() {
+    // function resetGame(settings: GameSettings = { colors: 4, parts: 6, multiplier: 1 }) {
     //     setTarget(null);
     //     setSource(null);
     //     setGameOver(false);
+    //     const colorArray = generateColors(settings.multiplier, settings.parts, settings.colors);
 
-    //     resetGame();
+    //     const newBottles = generateBottlesForColors(colorArray, settings.parts);
+
+    //     setBottles(newBottles);
     // }
-
-    function resetGame(settings: GameSettings = { colors: 4, parts: 6, multiplier: 1 }) {
-        setTarget(null);
-        setSource(null);
-        setGameOver(false);
-        const colorArray = generateColors(settings.multiplier, settings.parts, settings.colors);
-
-        const newBottles = generateBottlesForColors(colorArray, settings.parts);
-
-        setBottles(newBottles);
-    }
 
     return (
         <>
-        <Menu click={resetGame}/>
-            <div className="bottles">
+            <Menu />
+            <Bottles />
+            <Moves />
+            
+            {/* <div className="bottles">
                 {bottles.map((bottle) => (
                     <Bottle
                         key={bottle.id}
@@ -96,12 +80,12 @@ function App() {
                     />
                 ))}
 
-                {gameOver && <div className="game-over">
-                    
-                    <p>Game Over</p>
-                    
-                </div>}
-            </div>
+                {gameOver && (
+                    <div className="game-over">
+                        <p>Game Over</p>
+                    </div>
+                )}
+            </div> */}
         </>
     );
 }
