@@ -1,0 +1,70 @@
+div.grid-view {
+    --grid-size: 50px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    div.grid-row {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+        &.empty {
+            height: var(--grid-size);
+            background: #444;
+            width: 100%;
+        }
+
+        div.row-index {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 30px;
+
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        div.grid-cell {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: var(--grid-size);
+            height: var(--grid-size);
+            border: 1px solid black;
+            background-color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+
+            span.coords {
+                position: absolute;
+                left: 1px;
+                bottom: 1px;
+                font-size: 9px;
+                font-weight: bold;
+                color: #0008;
+            }
+
+            &.empty {
+                background-color: #080;
+            }
+
+            &.wall {
+                background-color: #888;
+            }
+
+            &.water {
+                background-color: #00f;
+            }
+        }
+    }
+}

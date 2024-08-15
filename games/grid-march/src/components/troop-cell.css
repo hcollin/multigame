@@ -1,0 +1,18 @@
+
+
+div.troop-cell {
+    background: white;
+    color: black;
+    padding: 0.5rem;
+    border-radius: 40%;
+    font-size: 1rem;
+    height: 25px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.drowned {
+        background: #FFF4;
+    }
+}
