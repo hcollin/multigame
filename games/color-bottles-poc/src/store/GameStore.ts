@@ -1,6 +1,6 @@
 import { proxy } from "valtio";
 import { iBottle } from "../models/Bottle.model";
-import { bottlePour } from "../utils/bottleUtils";
+import { bottlePour, getTopColorCount } from "../utils/bottleUtils";
 import { GameSettings } from "../models/GameSettings";
 import { generateColors, generateBottlesForColors } from "../utils/randomBottle";
 import { win } from "../utils/bottleValidator";
@@ -19,6 +19,7 @@ export interface GameStore {
 
     status: GAMESTATUS;
     moves: number;
+    score: number;
 
     settings: GameSettings;
 
@@ -49,8 +50,10 @@ export const gameStore: GameStore = proxy<GameStore>({
     origBottles: [],
 
     moves: 0,
+    score: 0,
 
     settings: {
+        name: "Custom",
         colors: 4,
         parts: 4,
         multiplier: 1,
@@ -64,6 +67,7 @@ export const gameStore: GameStore = proxy<GameStore>({
         const target = gameStore.getBottle(tid);
         if(!source || !target) return false;
         
+        const scoreBonus = getTopColorCount(source);
         const pourIsSuccess = bottlePour(source, target);
         if (!pourIsSuccess) return false;
         gameStore.bottles = gameStore.bottles.map((b) => {
@@ -73,6 +77,10 @@ export const gameStore: GameStore = proxy<GameStore>({
         });
         gameStore.checkState();
         gameStore.moves++;
+        gameStore.score += scoreBonus;
+        if(target.completed) { 
+            gameStore.score += target.partCount;
+        }
         return true;
     },
 
@@ -92,6 +100,8 @@ export const gameStore: GameStore = proxy<GameStore>({
     reset: () => {
         gameStore.bottles = [...gameStore.origBottles];
         gameStore.status = GAMESTATUS.play;
+        gameStore.moves = 0;
+        gameStore.score = 0;
     },
 
     newGame: (settings) => {
@@ -110,6 +120,8 @@ export const gameStore: GameStore = proxy<GameStore>({
         gameStore.bottles = newBottles;
         gameStore.origBottles = [...newBottles];
         gameStore.status = GAMESTATUS.play;
+        gameStore.moves = 0;
+        gameStore.score = 0;
     },
 
     setBottles: (bottles: iBottle[]) => {

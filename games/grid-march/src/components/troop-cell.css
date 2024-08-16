@@ -1,6 +1,7 @@
 
 
 div.troop-cell {
+    position: relative;
     background: white;
     color: black;
     padding: 0.5rem;
@@ -14,5 +15,37 @@ div.troop-cell {
 
     &.drowned {
         background: #FFF4;
+    }
+
+    &.dead {
+        background: #F884;
+    }
+
+    div.damage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: transparent;
+        color: red;
+        text-shadow: 0 0 2px white, 0 0 4px #0004;
+        font-size: 1.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: damage-display 3s ease;
+    }
+}
+
+@keyframes damage-display {
+    
+    0% {
+        opacity: 100%;
+        top: 0;
+    }
+    
+    100% {
+        opacity: 10%;
+        top: -3rem;
     }
 }

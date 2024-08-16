@@ -1,6 +1,7 @@
 import { proxy } from "valtio";
-import { CELLTYPE, Grid } from "../models/Grid.model";
+import { CELLTYPE, Grid, GRIDOBJECTSTATUS, GRIDOBJECTYPE } from "../models/Grid.model";
 import { Troop, TROOPSTATUS } from "../models/Troops.model";
+import { gridObjectValue } from "../utils/gridObject";
 
 export enum MOVEDIRECTION {
     LEFT = "left",
@@ -8,6 +9,7 @@ export enum MOVEDIRECTION {
 }
 
 export enum GAMESTATUS {
+    INIT = "init",
     PLAY = "play",
     WON = "won",
     LOST = "lost",
@@ -24,23 +26,29 @@ export interface GameStore {
     moveHistory: string[];
 
     reset: (grid: Grid, troops: Troop[]) => void;
+    start: () => void;
 
     process: () => void;
     move: (troopId: string, direction: MOVEDIRECTION) => boolean;
+
+    takeDamage: (troopId: string, damage: number) => void;
 }
 
 export const gameStore = proxy<GameStore>({
     turn: 0,
     grid: {
-        size: [20, 8],
+        size: [0, 0],
         rows: [],
     },
     troops: [],
 
-    status: GAMESTATUS.PLAY,
+    status: GAMESTATUS.INIT,
     row: 0,
     moveHistory: [],
 
+    start: () => {
+        gameStore.status = GAMESTATUS.PLAY;
+    },
 
     reset: (grid: Grid, troops: Troop[]) => {
         gameStore.turn = 0;
@@ -54,47 +62,56 @@ export const gameStore = proxy<GameStore>({
         gameStore.row++;
         gameStore.turn++;
 
+        // Remove all dead troops
+        gameStore.troops = gameStore.troops.filter((t) => t.status !== TROOPSTATUS.DEAD);
 
-        // All drowned troops are now dead
+        // Check effects of the grid for each troop
         gameStore.troops.forEach((t) => {
-            if(t.status === TROOPSTATUS.DROWNED) {
-                t.status = TROOPSTATUS.DEAD;
+            const troopCell = gameStore.grid.rows[gameStore.row + t.rowDiff].cells[t.col];
+
+            // If troop is in water, take 50% damage
+            const isInWater = troopCell.type === CELLTYPE.WATER;
+            if (isInWater) {
+                const dmg = Math.floor(t.size / 2);
+                gameStore.takeDamage(t.id, dmg);
             }
+
+            // Check for objects on the cell
+            troopCell.objects.forEach((o) => {
+                if (o.status !== GRIDOBJECTSTATUS.ONGRID) return;
+                
+                if (o.type === GRIDOBJECTYPE.TROOPPLUS) {
+                    const val = gridObjectValue(o);
+                    t.size += val;
+                    o.status = GRIDOBJECTSTATUS.PICKEDUP;
+                }
+
+                if (o.type === GRIDOBJECTYPE.TROOPMULTI) {
+                    const val = gridObjectValue(o);
+                    t.size *= val;
+                    o.status = GRIDOBJECTSTATUS.PICKEDUP;
+                }
+            });
         });
 
-
-        // Check if any troop drops into water
-        gameStore.troops.forEach((t) => {
-            const isInWater = gameStore.grid.rows[gameStore.row + t.rowDiff].cells[t.col].type === CELLTYPE.WATER;
-            if(isInWater) {
-                t.status = TROOPSTATUS.DROWNED;
-                t.size = 0;
-            }
-            // return isInWater;
-        });
-
-
-
-        // If now troops are alive, game over
+        // If no troops are alive, game over
         const aliveTroops = gameStore.troops.filter((t) => t.status === TROOPSTATUS.ALIVE);
-        if(aliveTroops.length === 0) {
+        if (aliveTroops.length === 0) {
             console.log("Game Over");
             gameStore.status = GAMESTATUS.LOST;
         }
-        
+
         // If any troop reaches the end alive, game won
-        if(gameStore.row === gameStore.grid.size[0] - 1) {
+        if (gameStore.row === gameStore.grid.size[0] - 1) {
             const won = gameStore.troops.some((t) => t.status === TROOPSTATUS.ALIVE);
-            if(won) {
+            if (won) {
                 console.log("Game Won");
                 gameStore.status = GAMESTATUS.WON;
             }
         }
-        
     },
 
     move: (troopId: string, direction: MOVEDIRECTION) => {
-        console.log(gameStore.turn, gameStore.moveHistory.length);
         const troop = gameStore.troops.find((t) => t.id === troopId);
         if (!troop) return false;
 
@@ -102,21 +119,28 @@ export const gameStore = proxy<GameStore>({
             if (troop.col === 0) {
                 return false;
             }
-
             troop.col--;
         }
 
-        if(direction === MOVEDIRECTION.RIGHT) {
+        if (direction === MOVEDIRECTION.RIGHT) {
             if (troop.col === gameStore.grid.size[1] - 1) {
                 return false;
             }
-
             troop.col++;
-        }   
+        }
 
         gameStore.moveHistory.push(`Troop ${troopId} moved ${direction} row ${gameStore.row}`);
-        gameStore.process();
 
         return true;
+    },
+
+    takeDamage: (troopId: string, damage: number) => {
+        const troop = gameStore.troops.find((t) => t.id === troopId);
+        if (!troop) return;
+        troop.size -= damage;
+        if (troop.size <= 0) {
+            troop.status = TROOPSTATUS.DEAD;
+            troop.size = 0;
+        }
     },
 });

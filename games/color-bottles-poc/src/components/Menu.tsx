@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { GameSettings } from "../models/GameSettings";
-
-import "./menu.css";
 import { useSnapshot } from "valtio";
 import { gameStore, GameStore } from "../store/GameStore";
+
+import "../styles/general-button.css";
+import "./menu.css";
+
 
 const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
     {
         name: "Very easy",
         conf: {
+            name: "Very easy",
             colors: 3,
             parts: 3,
             multiplier: 2,
@@ -17,6 +20,7 @@ const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
     {
         name: "Easy",
         conf: {
+            name: "Easy",
             colors: 4,
             parts: 4,
             multiplier: 2,
@@ -25,6 +29,7 @@ const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
     {
         name: "Medium",
         conf: {
+            name: "Medium",
             colors: 5,
             parts: 5,
             multiplier: 2,
@@ -33,6 +38,7 @@ const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
     {
         name: "Hard",
         conf: {
+            name: "Hard",
             colors: 6,
             parts: 6,
             multiplier: 2,
@@ -41,6 +47,7 @@ const DEFAULTSETTINGS: { name: string; conf: GameSettings }[] = [
     {
         name: "Nightmare",
         conf: {
+            name: "Nightmare",
             colors: 6,
             parts: 9,
             multiplier: 3,
@@ -59,6 +66,7 @@ const Menu = () => {
 
     function newGame() {
         snap.newGame({
+            name: "Custom",
             colors: colors,
             parts: parts,
             multiplier: multiplier,
@@ -73,12 +81,11 @@ const Menu = () => {
         <nav>
             {!showCustom &&
                 DEFAULTSETTINGS.map((settingsItem) => (
-                    <button key={settingsItem.name} onClick={() => newDifficultyGame(settingsItem.conf)}>
+                    <button key={settingsItem.name} onClick={() => newDifficultyGame(settingsItem.conf)} className="general-button">
                         {settingsItem.name}
                     </button>
                 ))}
-
-            <button onClick={() => setShowCustom((p) => !p)}>Show Custom</button>
+            <button onClick={() => setShowCustom((p) => !p)} className="general-button">{showCustom ? "Cancel" : "Custom"}</button>
             {showCustom && (
                 <div className="custom">
                     <label>Colors</label>
@@ -110,7 +117,7 @@ const Menu = () => {
                 </div>
             )}
 
-            <button onClick={newGame}>New</button>
+            {showCustom && <button onClick={newGame} className="general-button">Start</button>}
         </nav>
     );
 };

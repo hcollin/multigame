@@ -1,8 +1,9 @@
 import { useSnapshot } from "valtio";
-import { GameStore, gameStore } from "../store/GameStore";
+import { GAMESTATUS, GameStore, gameStore } from "../store/GameStore";
 import Bottle from "./Bottle";
 import { iBottle } from "../models/Bottle.model";
 import { useEffect, useState } from "react";
+import { arnd } from "rndlib";
 
 const Bottles = () => {
     const snap = useSnapshot(gameStore) as GameStore;
@@ -28,7 +29,7 @@ const Bottles = () => {
     }, [source, target]);
 
     function selectBottle(b: iBottle) {
-        // if (gameOver) return;
+        if(snap.status !== GAMESTATUS.play) return;
 
         if (!source) {
             if (b.parts.length === 0) return;
@@ -61,6 +62,12 @@ const Bottles = () => {
                     onSelect={selectBottle}
                 />
             ))}
+
+            {snap.status === "won" && (
+                <div className="game-over">
+                    <p>{arnd(["Nice!", "Completed!", "Victory!", "Great work!", "Splendid!", "Game won!"])}</p>
+                </div>
+            )}
         </div>
     );
 };

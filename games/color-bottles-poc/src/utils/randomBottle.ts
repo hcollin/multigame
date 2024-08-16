@@ -80,5 +80,17 @@ export function generateBottlesForColors(colors: string[], partCount: number): i
         bottles.push(b);
     }
 
+    // Move partCount -2 parts from other randomly chosen bottles to the last bottle
+    const lastBottle = bottles[bottles.length - 1];
+    for (let p = 0; p < partCount - 2; p++) {
+        const otherBottle = arnd(bottles);
+        if (otherBottle.parts.length > 0) {
+            const part = otherBottle.parts.shift();
+            if (part) {
+                lastBottle.parts.push(part);
+            }
+        }
+    }
+
     return bottles;
 }

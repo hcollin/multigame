@@ -1,36 +1,56 @@
 import { useSnapshot } from "valtio";
 import { GAMESTATUS, gameStore, GameStore, MOVEDIRECTION } from "../stores/GameStore";
-import { Troop, TROOPSTATUS } from "../models/Troops.model";
 import { createGrid } from "../utils/gridUtils";
+import { createTroop } from "../utils/troopUtils";
+import { mainProcess } from "../utils/commands";
 
 const Actions = () => {
     const snap = useSnapshot(gameStore) as GameStore;
 
     function process() {
-        snap.process();
+        // snap.process();
+        mainProcess();
+    }
+
+    function start() {
+        snap.reset(createGrid(8, 50), [createTroop({ col: 3, size: 20 })]);
+        // snap.start();
     }
 
     function reset() {
         const grid = createGrid(8, 50);
 
-        const troop: Troop = {
-            id: "troop-1",
-            col: 3,
-            rowDiff: 0,
-
-            size: 20,
-            status: TROOPSTATUS.ALIVE,
-        };
+        const troop = createTroop({ col: 3, size: 20 });
 
         snap.reset(grid, [troop]);
     }
 
     function left() {
-        snap.move("troop-1", MOVEDIRECTION.LEFT);
+        if (snap.troops.length === 0) {
+            console.error("No troops to move!", snap);
+            return;
+        }
+        const tid = snap.troops[0].id;
+        if (tid) {
+            if (snap.move(tid, MOVEDIRECTION.LEFT)) mainProcess();
+        }
     }
 
     function right() {
-        snap.move("troop-1", MOVEDIRECTION.RIGHT);
+        if (snap.troops.length === 0) {
+            console.error("No troops to move!", snap);
+            return;
+        }
+        const tid = snap.troops[0].id;
+        if (tid) {
+            if (snap.move(tid, MOVEDIRECTION.RIGHT)) mainProcess();
+        }
+    }    
+
+    if (snap.status === GAMESTATUS.INIT) {
+        <div className="actions">
+            <button onClick={start}>Start</button>
+        </div>;
     }
 
     return (
@@ -40,8 +60,6 @@ const Actions = () => {
                     <button onClick={left}>Left</button>
                     <button onClick={process}>Forward</button>
                     <button onClick={right}>Right</button>
-
-                    
                 </>
             )}
             <button onClick={reset}>Reset</button>

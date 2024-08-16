@@ -2,7 +2,6 @@
 
 export enum TROOPSTATUS {
     ALIVE = "alive",
-    DROWNED = "drowned",
     DEAD = "dead",
 }
 
@@ -15,5 +14,4 @@ export interface Troop {
     rowDiff: number;    // Usually 0   
 
     status: TROOPSTATUS;
-    
 }

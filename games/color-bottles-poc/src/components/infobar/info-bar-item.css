@@ -1,0 +1,38 @@
+
+
+div.info-bar-item {
+
+    border: solid 2px #FFF8;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 10rem;
+    height: 2.5rem;
+
+    overflow: hidden;
+
+    label {
+        font-size: 0.8rem;
+        font-style: italic;
+        background: #444;
+        padding: 0.25rem 0.5rem;
+        height: 100%;
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    span {
+        flex: 1 1 auto;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        font-family: "Courier New", Courier, monospace;
+        
+    }
+
+}
