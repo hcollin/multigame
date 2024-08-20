@@ -4,12 +4,41 @@ import { createGrid } from "../utils/gridUtils";
 import { createTroop } from "../utils/troopUtils";
 import { mainProcess } from "../utils/commands";
 
+import { useEffect } from "react";
+import { keyboardCommands } from "../utils/keyboardCommands";
+
+
 const Actions = () => {
     const snap = useSnapshot(gameStore) as GameStore;
+
+    useEffect(() => {
+        if(snap.status === GAMESTATUS.PLAY) {
+            keyboardCommands(handleKey, {
+                keyMap: { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up"},
+            });
+        }
+        
+    }, [snap]);
 
     function process() {
         // snap.process();
         mainProcess();
+    }
+
+    function handleKey(key: string) {
+        if(snap.status !== GAMESTATUS.PLAY) return;
+        switch (key) {
+            case "ArrowLeft":
+                left();
+                break;
+            case "ArrowRight":
+                right();
+                break;
+            case "ArrowUp":
+                process();
+                break;
+        }
+
     }
 
     function start() {
