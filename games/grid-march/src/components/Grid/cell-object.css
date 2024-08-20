@@ -1,0 +1,31 @@
+div.cell-object {
+    position: absolute;
+    top: calc(10% - 2px);
+    left: calc(10% - 2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+    
+
+    &.troop-plus {
+        border-radius: 50%;
+        border: solid 2px #FFF8;
+        background-color: #008A;
+        color: white;
+        border: solid 2px #FFF8;
+
+        box-shadow: inset 0 0 10px 5px #8884;
+
+    }
+
+    &.troop-multi {
+        border-radius: 50%;
+        border: solid 2px #FFF8;
+        background-color: #008A;
+        color: white;
+        
+        box-shadow: inset 0 0 10px 5px #88FA;
+    }
+}

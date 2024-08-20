@@ -6,6 +6,11 @@ export enum TROOPSTATUS {
 }
 
 
+export enum TROOPEFFECTS {
+    JUMPING = "jumping",
+    
+}
+
 export interface Troop {
     id: string;
     size: number;
@@ -14,4 +19,8 @@ export interface Troop {
     rowDiff: number;    // Usually 0   
 
     status: TROOPSTATUS;
+
+    effects: TROOPEFFECTS[];
+
+    active: boolean;
 }

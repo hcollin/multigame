@@ -18,7 +18,7 @@ const effectStore = proxy<EffectStore>({
     damage: [],
 
     process: () => {
-        console.log("Processing effects");
+        // console.log("Processing effects");
     },
 });
 

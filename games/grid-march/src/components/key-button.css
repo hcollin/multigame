@@ -35,6 +35,12 @@ button.key-button {
         height: 50px;
     }
 
+    &.oneline {
+        width: auto;
+        padding: 0 10px;
+        height: 50px;
+    }
+
     &:hover, &.hover {
         background: #EEF;
     }
@@ -46,5 +52,12 @@ button.key-button {
         border-left: solid 5px #0005;
         border-bottom: solid 5px #0008; */
         background: #AAA;
+        transform: scale(0.9);
+    }
+
+    &:disabled, &.disabled {
+        background: #888;
+        opacity: 0.25;
+        
     }
 }

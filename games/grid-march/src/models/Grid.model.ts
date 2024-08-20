@@ -21,6 +21,7 @@ export enum CELLTYPE {
     EMPTY = "empty",
     WALL = "wall",
     WATER = "water",
+    SCORE = "scoring",
 }
 
 

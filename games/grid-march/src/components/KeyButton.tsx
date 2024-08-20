@@ -6,7 +6,8 @@ export type KeyButtonProps = {
 	onClick: () => void;
 	children?: React.ReactNode;
 	className?: string;
-	bindToKey?: string;
+	bindToKey?: string|string[];
+	disabled?: boolean;
 };
 
 const KeyButton: FC<KeyButtonProps> = (props) => {
@@ -14,27 +15,36 @@ const KeyButton: FC<KeyButtonProps> = (props) => {
 
 	useEffect(() => {
 		if (props.bindToKey) {
+			const keys = Array.isArray(props.bindToKey) ? props.bindToKey : [props.bindToKey];
 			const keyHandler = (event: KeyboardEvent) => {
-				if (event.key === props.bindToKey) {
+				if (keys.includes(event.key)) {
+					if(props.disabled) return;
 					props.onClick();
 					setIsActive(true);
 
 					setTimeout(() => {
 						setIsActive(false);
 					}, 200);
-				}
+				} 
 			};
 			document.addEventListener("keydown", keyHandler);
 			return () => {
 				document.removeEventListener("keydown", keyHandler);
 			};
 		}
-	}, [props.bindToKey]);
+	}, [props.bindToKey, props.disabled]);
 
-	const classes = `key-button ${props.className || ""} ${[isActive ? "active" : ""]}`;
+
+	function click() {
+		if(props.disabled) return;
+		props.onClick();
+	}
+
+
+	const classes = `key-button ${props.className || ""} ${[isActive ? "active" : ""]} ${props.disabled ? "disabled" : ""}`;
 
 	return (
-		<button className={classes} onClick={props.onClick}>
+		<button className={classes} onClick={click}>
 			{props?.children || "A"}
 		</button>
 	);

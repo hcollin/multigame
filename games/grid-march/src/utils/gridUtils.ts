@@ -3,7 +3,7 @@ import { Grid, Row, Cell, CELLTYPE, GRIDOBJECTYPE, GridObject } from "../models/
 import { createGridObject } from "./gridObject";
 
 export function createGrid(width: number, height: number): Grid {
-    const grid = addObjectsToGrid(addWaterToGrid(createEmptyGrid(width, height), [50, 2]));
+    const grid = placeScoringTiles(addObjectsToGrid(addWaterToGrid(createEmptyGrid(width, height), [50, 2])));
 
     return grid;
 }
@@ -100,4 +100,20 @@ function createTroopMultiObject(grid: Grid): GridObject | null {
         return obj;
     }
     return null;
+}
+
+
+function placeScoringTiles(grid: Grid): Grid {
+
+    // Place a scoring tile replacing an empty tile every 20 rows starting from row 20
+    for (let i = 20; i < grid.size[0]; i += 20) {
+        const row = grid.rows[i];
+        const emptyCells = row.cells.filter((c) => c.type === CELLTYPE.EMPTY && c.col > 0 && c.col < grid.size[1] - 1);
+        if (emptyCells.length > 0) {
+            const cell = emptyCells[rnd(0, emptyCells.length - 1)];
+            cell.type = CELLTYPE.SCORE;
+        }
+    }
+
+    return grid;
 }
