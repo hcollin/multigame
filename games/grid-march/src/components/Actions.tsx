@@ -4,42 +4,20 @@ import { createGrid } from "../utils/gridUtils";
 import { createTroop } from "../utils/troopUtils";
 import { mainProcess } from "../utils/commands";
 
-import { useEffect } from "react";
-import { keyboardCommands } from "../utils/keyboardCommands";
+import KeyButton from "./KeyButton";
 
+import arrow from "../assets/arrow.svg";
+
+import "./actions.css";
 
 const Actions = () => {
     const snap = useSnapshot(gameStore) as GameStore;
-
-    useEffect(() => {
-        if(snap.status === GAMESTATUS.PLAY) {
-            keyboardCommands(handleKey, {
-                keyMap: { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up"},
-            });
-        }
-        
-    }, [snap]);
 
     function process() {
         // snap.process();
         mainProcess();
     }
 
-    function handleKey(key: string) {
-        if(snap.status !== GAMESTATUS.PLAY) return;
-        switch (key) {
-            case "ArrowLeft":
-                left();
-                break;
-            case "ArrowRight":
-                right();
-                break;
-            case "ArrowUp":
-                process();
-                break;
-        }
-
-    }
 
     function start() {
         snap.reset(createGrid(8, 50), [createTroop({ col: 3, size: 20 })]);
@@ -55,6 +33,7 @@ const Actions = () => {
     }
 
     function left() {
+        console.log("LEFT");
         if (snap.troops.length === 0) {
             console.error("No troops to move!", snap);
             return;
@@ -85,11 +64,11 @@ const Actions = () => {
     return (
         <div className="actions">
             {snap.status === GAMESTATUS.PLAY && (
-                <>
-                    <button onClick={left}>Left</button>
-                    <button onClick={process}>Forward</button>
-                    <button onClick={right}>Right</button>
-                </>
+                <div className="keys">
+                    <KeyButton onClick={left} bindToKey="ArrowLeft"><img className="left" src={arrow} /></KeyButton>
+                    <KeyButton onClick={process} bindToKey="ArrowUp" className="forward"><img className="forward" src={arrow} /></KeyButton>
+                    <KeyButton onClick={right} bindToKey="ArrowRight"><img className="right" src={arrow} /></KeyButton>
+                </div>
             )}
             <button onClick={reset}>Reset</button>
 

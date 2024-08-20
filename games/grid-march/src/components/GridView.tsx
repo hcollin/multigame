@@ -55,15 +55,16 @@ const GridRow = (props: { row: Row; troops: Troop[]; gameRow: number }) => {
 const GridCell = (props: { cell: Cell; troop: Troop | null }) => {
     return (
         <div className={`grid-cell ${props.cell.type}`}>
-            {props.troop !== null && <TroopCell troop={props.troop} />}
+            
             {props.cell.objects.map((o, i) => (
                 <CellObject key={`go-${props.cell.row}-${props.cell.col}-${i}`} object={o} />
             ))}
-            {props.troop === null && (
+            {/* {props.troop === null && (
                 <span className="coords">
                     {props.cell.row}, {props.cell.col}
                 </span>
-            )}
+            )} */}
+            {props.troop !== null && <TroopCell troop={props.troop} />}
         </div>
     );
 };

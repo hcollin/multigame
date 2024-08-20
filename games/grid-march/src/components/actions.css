@@ -1,0 +1,41 @@
+
+
+div.actions {
+
+
+    div.keys {
+        display: flex;
+        flex-direction: row;
+
+        justify-content: center;
+        align-items: flex-end;
+
+
+        & > button {
+            margin: 5px;
+
+            img {
+                height: 45px;
+                width: 45px;
+
+                &.left {
+                    transform: rotate(90deg);
+                }
+
+                &.right {
+                    transform: rotate(-90deg);
+                }
+
+                &.forward {
+                    transform: rotate(180deg);
+                }
+            }
+
+            &.forward {
+                margin-bottom: 25px;
+            }
+        }
+    
+
+    }
+}
