@@ -18,7 +18,7 @@ div.grid-view {
         flex-direction: row;
 
         &.last-row {
-            
+
 
             &:after {
                 content: "";
@@ -29,13 +29,13 @@ div.grid-view {
                 height: var(--grid-size);
                 z-index: 2;
                 background: url("../../assets/finishline.png");
-                
+
                 background-size: var(--grid-size) var(--grid-size);
-                background-repeat: repeat-x;            
+                background-repeat: repeat-x;
                 opacity: 0.25;
-                
+
             }
-                
+
         }
 
         &.empty {
@@ -69,7 +69,7 @@ div.grid-view {
             border-left-color: #0008;
             border-right-color: #000A;
             border-bottom-color: #000D;
-            
+
             font-size: 12px;
             font-weight: bold;
             color: black;
@@ -85,6 +85,7 @@ div.grid-view {
 
             &.empty {
                 background-color: #080;
+
                 img {
                     position: absolute;
                     width: 120%;
@@ -103,7 +104,7 @@ div.grid-view {
             }
 
 
-            
+
         }
     }
 }

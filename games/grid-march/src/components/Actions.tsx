@@ -1,5 +1,5 @@
 import { useSnapshot } from "valtio";
-import { GAMESTATUS, gameStore, GameStore, MOVEDIRECTION } from "../stores/GameStore";
+import { GAMESTATUS, levelStore, LevelStore, MOVEDIRECTION } from "../stores/LevelStore";
 import { createGrid } from "../utils/gridUtils";
 import { createTroop, splitTroop } from "../utils/troopUtils";
 import { mainProcess } from "../utils/commands";
@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 const Actions = () => {
 	const [activeTrooper, setActiveTrooper] = useState<Troop | null>(null);
-	const snap = useSnapshot(gameStore) as GameStore;
+	const snap = useSnapshot(levelStore) as LevelStore;
 
 	useEffect(() => {
 		setActiveTrooper((prev) => {

@@ -16,7 +16,7 @@ export enum GAMESTATUS {
 	LOST = "lost",
 }
 
-export interface GameStore {
+export interface LevelStore {
 	turn: number;
 	grid: Grid;
 	score: number;
@@ -44,7 +44,7 @@ export interface GameStore {
 	jumpTroop: (troopId?: string) => void;
 }
 
-export const gameStore = proxy<GameStore>({
+export const levelStore = proxy<LevelStore>({
 	turn: 0,
 	score: 0,
 	grid: {
@@ -58,31 +58,31 @@ export const gameStore = proxy<GameStore>({
 	moveHistory: [],
 
 	start: () => {
-		gameStore.status = GAMESTATUS.PLAY;
+		levelStore.status = GAMESTATUS.PLAY;
 	},
 
 	reset: (grid: Grid, troops: Troop[]) => {
-		gameStore.turn = 0;
-		gameStore.row = 0;
-		gameStore.grid = grid;
-		gameStore.troops = troops;
-		gameStore.status = GAMESTATUS.PLAY;
+		levelStore.turn = 0;
+		levelStore.row = 0;
+		levelStore.grid = grid;
+		levelStore.troops = troops;
+		levelStore.status = GAMESTATUS.PLAY;
 	},
 
 	process: () => {
-		gameStore.row++;
-		gameStore.turn++;
+		levelStore.row++;
+		levelStore.turn++;
 
-		gameStore.score++;
+		levelStore.score++;
 
 		// Remove all dead troops
-		gameStore.troops = gameStore.troops.filter((t) => t.status !== TROOPSTATUS.DEAD);
+		levelStore.troops = levelStore.troops.filter((t) => t.status !== TROOPSTATUS.DEAD);
 
 		// Check effects of the grid for each troop
-		gameStore.troops.forEach((troop) => {
+		levelStore.troops.forEach((troop) => {
 			if (troop.status === TROOPSTATUS.DEAD) return;
 
-			const troopCell = gameStore.grid.rows[gameStore.row + troop.rowDiff].cells[troop.col];
+			const troopCell = levelStore.grid.rows[levelStore.row + troop.rowDiff].cells[troop.col];
 
 			const troopIsJumping = troop.effects.includes(TROOPEFFECTS.JUMPING);
 
@@ -90,19 +90,19 @@ export const gameStore = proxy<GameStore>({
 			const isInWater = troopCell.type === CELLTYPE.WATER && !troopIsJumping;
 			if (isInWater) {
 				const dmg = Math.floor(troop.size / 2);
-				gameStore.takeDamage(troop.id, dmg);
+				levelStore.takeDamage(troop.id, dmg);
 			}
 
 			// If troop is in a scoring cell, add its size to the score
 			const isScoring = troopCell.type === CELLTYPE.SCORE && !troopIsJumping;
 			if (isScoring) {
-				gameStore.score += troop.size;
+				levelStore.score += troop.size;
 			}
 
 			// If troop is in the last add 25% of its size to the score
-			const isLast = gameStore.row === gameStore.grid.size[0] - 1;
+			const isLast = levelStore.row === levelStore.grid.size[0] - 1;
 			if (isLast) {
-				gameStore.score += Math.floor(troop.size / 4);
+				levelStore.score += Math.floor(troop.size / 4);
 			}
 
 			// Check for objects on the cell
@@ -125,7 +125,7 @@ export const gameStore = proxy<GameStore>({
 			}
 
 			// All troops in the same cell are combined to a single troop
-			const sameCellTroops = gameStore.troops.filter(
+			const sameCellTroops = levelStore.troops.filter(
 				(t) =>
 					t.col === troop.col &&
 					t.id !== troop.id &&
@@ -139,36 +139,36 @@ export const gameStore = proxy<GameStore>({
 
 				sameCellTroops.forEach((t) => {
 					t.status = TROOPSTATUS.DEAD;
-					gameStore.remoteTroop(t.id);
+					levelStore.remoteTroop(t.id);
 				});
 			}
 		});
 
 		// If no troops are active, activate the first one
-		const activeTroop = gameStore.getActiveTroop();
+		const activeTroop = levelStore.getActiveTroop();
 		if (!activeTroop) {
-			gameStore.setActiveTroop(gameStore.troops[0].id);
+			levelStore.setActiveTroop(levelStore.troops[0].id);
 		}
 
 		// If no troops are alive, game over
-		const aliveTroops = gameStore.troops.filter((t) => t.status === TROOPSTATUS.ALIVE);
+		const aliveTroops = levelStore.troops.filter((t) => t.status === TROOPSTATUS.ALIVE);
 		if (aliveTroops.length === 0) {
 			console.log("Game Over");
-			gameStore.status = GAMESTATUS.LOST;
+			levelStore.status = GAMESTATUS.LOST;
 		}
 
 		// If any troop reaches the end alive, game won
-		if (gameStore.row === gameStore.grid.size[0] - 1) {
-			const won = gameStore.troops.some((t) => t.status === TROOPSTATUS.ALIVE);
+		if (levelStore.row === levelStore.grid.size[0] - 1) {
+			const won = levelStore.troops.some((t) => t.status === TROOPSTATUS.ALIVE);
 			if (won) {
 				console.log("Game Won");
-				gameStore.status = GAMESTATUS.WON;
+				levelStore.status = GAMESTATUS.WON;
 			}
 		}
 	},
 
 	move: (troopId: string, direction: MOVEDIRECTION) => {
-		const troop = gameStore.troops.find((t) => t.id === troopId);
+		const troop = levelStore.troops.find((t) => t.id === troopId);
 		if (!troop) return false;
 
 		if (direction === MOVEDIRECTION.FORWARD) {
@@ -185,16 +185,16 @@ export const gameStore = proxy<GameStore>({
 		}
 
 		if (direction === MOVEDIRECTION.RIGHT) {
-			if (troop.col === gameStore.grid.size[1] - 1) {
+			if (troop.col === levelStore.grid.size[1] - 1) {
 				return false;
 			}
 			troop.col++;
 		}
 
-		gameStore.moveHistory.push(`Troop ${troopId} moved ${direction} row ${gameStore.row}`);
+		levelStore.moveHistory.push(`Troop ${troopId} moved ${direction} row ${levelStore.row}`);
 
         // Remove effects from all troops
-        gameStore.troops = gameStore.troops.map((t) => {
+        levelStore.troops = levelStore.troops.map((t) => {
             
             const removed: TROOPEFFECTS[] = [];
             t.effects = t.effects.filter((effect) => {
@@ -213,7 +213,7 @@ export const gameStore = proxy<GameStore>({
 	},
 
 	takeDamage: (troopId: string, damage: number) => {
-		const troop = gameStore.troops.find((t) => t.id === troopId);
+		const troop = levelStore.troops.find((t) => t.id === troopId);
 		if (!troop) return;
 		troop.size -= damage;
 		if (troop.size <= 0) {
@@ -225,7 +225,7 @@ export const gameStore = proxy<GameStore>({
 	setActiveTroop: (troopId: string) => {
 		let activeId = -1;
 
-		gameStore.troops = gameStore.troops.map((t: Troop, i: number) => {
+		levelStore.troops = levelStore.troops.map((t: Troop, i: number) => {
 			if (troopId === t.id) {
 				t.active = true;
 				activeId = i;
@@ -234,18 +234,18 @@ export const gameStore = proxy<GameStore>({
 			}
 			return t;
 		});
-		if (activeId === -1 && gameStore.troops.length > 0) {
-			gameStore.troops[0].active = true;
+		if (activeId === -1 && levelStore.troops.length > 0) {
+			levelStore.troops[0].active = true;
 		}
 	},
 
 	setNextTroopActive: () => {
-		const activeTroop = gameStore.getActiveTroop();
+		const activeTroop = levelStore.getActiveTroop();
 		if (activeTroop) {
-			const idx = gameStore.troops.findIndex((t) => t.id === activeTroop.id);
+			const idx = levelStore.troops.findIndex((t) => t.id === activeTroop.id);
 			if (idx !== -1) {
-				const next = gameStore.troops[(idx + 1) % gameStore.troops.length];
-				gameStore.setActiveTroop(next.id);
+				const next = levelStore.troops[(idx + 1) % levelStore.troops.length];
+				levelStore.setActiveTroop(next.id);
 			} else {
 				console.error("No idx?", idx);
 			}
@@ -255,23 +255,23 @@ export const gameStore = proxy<GameStore>({
 	},
 
 	getActiveTroop: () => {
-		const t = gameStore.troops.find((t: Troop) => t.active) as Troop | undefined;
+		const t = levelStore.troops.find((t: Troop) => t.active) as Troop | undefined;
 		return t || null;
 	},
 
 	addNewTroop: (troop: Troop) => {
-		gameStore.troops.push(troop);
+		levelStore.troops.push(troop);
 	},
 
 	remoteTroop: (troopId: string) => {
-		gameStore.troops = gameStore.troops.filter((t) => t.id !== troopId);
+		levelStore.troops = levelStore.troops.filter((t) => t.id !== troopId);
 	},
 
 	jumpTroop: (troopId?: string) => {
-		const troop = troopId ? gameStore.troops.find((t) => t.id === troopId) : gameStore.getActiveTroop();
+		const troop = troopId ? levelStore.troops.find((t) => t.id === troopId) : levelStore.getActiveTroop();
 		if (!troop) return;
 
 		troop.effects.push(TROOPEFFECTS.JUMPING);
-		gameStore.process();
+		levelStore.process();
 	},
 });

@@ -1,5 +1,5 @@
 import { useSnapshot } from "valtio";
-import { GameStore, gameStore } from "../../stores/GameStore";
+import { LevelStore, levelStore } from "../../stores/LevelStore";
 import { Cell, Row, GridObject, GRIDOBJECTYPE } from "../../models/Grid.model";
 import { Troop, TROOPSTATUS } from "../../models/Troops.model";
 import TroopCell from "./TroopCell";
@@ -10,7 +10,7 @@ import BackgroundTile from "./BackgroundTile";
 import CellObject from "./CellObject";
 
 const GridView = () => {
-	const snap = useSnapshot(gameStore) as GameStore;
+	const snap = useSnapshot(levelStore) as LevelStore;
 
 	const visibility = 15;
 

@@ -1,5 +1,5 @@
 import effectStore from "../stores/EffectStore";
-import { gameStore } from "../stores/GameStore";
+import { levelStore } from "../stores/LevelStore";
 
 /**
  * Process the game by one tick
@@ -7,7 +7,7 @@ import { gameStore } from "../stores/GameStore";
  * This function exectures all process functions on each store
  */
 export function mainProcess() {
-    gameStore.process();
+    levelStore.process();
     effectStore.process();
 
 }

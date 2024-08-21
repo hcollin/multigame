@@ -1,4 +1,4 @@
-import { gameStore } from "../stores/GameStore";
+import { levelStore } from "../stores/LevelStore";
 
 let keyHandler: null | ((e: KeyboardEvent) => void) = null;
 

@@ -2,14 +2,14 @@ import { useSnapshot } from "valtio";
 import { Troop } from "../../models/Troops.model";
 
 import "./troop-cell.css";
-import { gameStore } from "../../stores/GameStore";
+import { levelStore } from "../../stores/LevelStore";
 
 export interface TroopCellProps {
 	troop: Troop;
 }
 
 const TroopCell = (props: TroopCellProps) => {
-	const snap = useSnapshot(gameStore);
+	const snap = useSnapshot(levelStore);
 
 	const classes = ["troop-cell"];
 	classes.push(props.troop.status);
