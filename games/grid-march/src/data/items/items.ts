@@ -3,6 +3,8 @@ import { GeneralItem, ITEMTYPE } from "../../models/Item.model";
 import { mainProcess } from "../../utils/commands";
 import { splitTroop } from "../../utils/troopUtils";
 
+
+
 export const itemJump: GeneralItem = {
 	name: "Jump",
 	price: 100,
@@ -70,3 +72,13 @@ export const itemSplitter: GeneralItem = {
 		};
 	},
 };
+
+
+const allGeneralItems: GeneralItem[] = [
+	itemJump,
+	itemSplitter,
+];
+
+
+export default allGeneralItems;
+
