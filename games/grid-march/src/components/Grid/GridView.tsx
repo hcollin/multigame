@@ -1,13 +1,12 @@
 import { useSnapshot } from "valtio";
 import { LevelStore, levelStore } from "../../stores/LevelStore";
-import { Cell, Row, GridObject, GRIDOBJECTYPE } from "../../models/Grid.model";
+import { Cell, Row } from "../../models/Grid.model";
 import { Troop, TROOPSTATUS } from "../../models/Troops.model";
 import TroopCell from "./TroopCell";
-import { gridObjectValue } from "../../utils/gridObject";
-
-import "./grid-view.css";
 import BackgroundTile from "./BackgroundTile";
 import CellObject from "./CellObject";
+
+import "./grid-view.css";
 
 const GridView = () => {
 	const snap = useSnapshot(levelStore) as LevelStore;
@@ -27,7 +26,7 @@ const GridView = () => {
 				<GridEmptyRow key={`empty-row-${i}`} />
 			))}
 			{rows.map((r) => {
-				return <GridRow row={r} troops={snap.troops} gameRow={snap.row} key={`grid-row-${r.row}`} lastRow={r.row === snap.grid.size[0] - 1}/>;
+				return <GridRow row={r} troops={snap.troops} gameRow={snap.row} key={`grid-row-${r.row}`} lastRow={r.row === snap.grid.size[0] - 1} />;
 			})}
 		</div>
 	);
@@ -35,7 +34,7 @@ const GridView = () => {
 
 const GridRow = (props: { row: Row; troops: Troop[]; gameRow: number; lastRow: boolean }) => {
 	const cells = props.row.cells;
-    const classes = `grid-row ${props.lastRow ? "last-row" : ""}`;
+	const classes = `grid-row ${props.lastRow ? "last-row" : ""}`;
 
 	return (
 		<div className={classes}>

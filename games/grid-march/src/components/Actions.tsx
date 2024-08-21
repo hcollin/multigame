@@ -11,8 +11,13 @@ import arrow from "../assets/arrow.svg";
 import "./actions.css";
 import { Troop, TROOPEFFECTS } from "../models/Troops.model";
 import { useEffect, useState } from "react";
+import { GAMEVIEWSTATE } from "../App";
 
-const Actions = () => {
+interface ActionsProps {
+	changeState: (newState: GAMEVIEWSTATE) => void;
+}
+
+const Actions = (props: ActionsProps) => {
 	const [activeTrooper, setActiveTrooper] = useState<Troop | null>(null);
 	const snap = useSnapshot(levelStore) as LevelStore;
 
@@ -25,10 +30,10 @@ const Actions = () => {
 		});
 	}, [snap]);
 
-	function process() {
-		// snap.process();
-		mainProcess();
-	}
+	// function process() {
+	// 	// snap.process();
+	// 	mainProcess();
+	// }
 
 	function start() {
 		snap.reset(createGrid(8, 50), [createTroop({ col: 3, size: 20 })]);
@@ -111,7 +116,6 @@ const Actions = () => {
 	}
 
 	const troopIsJumping = activeTrooper === null ? false : activeTrooper.effects.includes(TROOPEFFECTS.JUMPING);
-	console.log("Active troop is jumping?", troopIsJumping, activeTrooper?.id);
 
 	return (
 		<div className="actions">
@@ -150,9 +154,21 @@ const Actions = () => {
 				</>
 			)}
 
-			<KeyButton onClick={reset} className="wide">
+			{(snap.status === GAMESTATUS.WON || snap.status === GAMESTATUS.LOST) && (
+				<>
+					<KeyButton onClick={() => props.changeState(GAMEVIEWSTATE.SHOP)} className="wide">
+						To Store!
+					</KeyButton>
+
+					<KeyButton onClick={() => props.changeState(GAMEVIEWSTATE.MAINMENU)} className="wide">
+						Back to Main Menu
+					</KeyButton>
+				</>
+			)}
+
+			{/* <KeyButton onClick={reset} className="wide">
 				Reset
-			</KeyButton>
+			</KeyButton> */}
 		</div>
 	);
 };
